@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "author": "PhyrexTsai",
   "dependencies": {
-    "@babel/runtime": "^7.14.8",
     "@material-ui/core": "^4.12.2",
     "autoprefixer": "7.1.6",
     "babel-cli": "^6.26.0",
@@ -78,8 +77,8 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
+    "@babel/runtime": "7.0.0-beta.55",
     "animated-scroll-to": "^1.2.2",
-    "@babel/runtime": "7.0.0-beta.42",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "node-sass-chokidar": "^0.0.3",

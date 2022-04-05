@@ -31,7 +31,7 @@ export const getSimpleTokenAddress = (networkId) => {
 export const getCryptoHerosTokenAddress = (networkId) => {
   switch (networkId) {
     case '1':
-      return '0x0';
+      return '0xe5fF129a56232F11BabBE55037D3Ed1842229A7C';
     case '3':
       return '0x55D571573784EAcA518BAeFb0DB6878b9d247Eb3';
     case '4':
@@ -39,14 +39,14 @@ export const getCryptoHerosTokenAddress = (networkId) => {
     case '42':
       return '0x0';
     default:
-      return '0x55D571573784EAcA518BAeFb0DB6878b9d247Eb3';
+      return '0xe5fF129a56232F11BabBE55037D3Ed1842229A7C';
   }
 }
 
 export const getCryptoHerosGameAddress = (networkId) => {
   switch (networkId) {
     case '1':
-      return '0x0';
+      return '0x8C7e5fabbD4AA67B4E4dB8BeEc191A5b5942a797';
     case '3':
       return '0xAD3314C9EBa6269DFfaEDD6378eE0320bB918258';
     case '4':
@@ -54,7 +54,7 @@ export const getCryptoHerosGameAddress = (networkId) => {
     case '42':
       return '0x0';
     default:
-      return '0xAD3314C9EBa6269DFfaEDD6378eE0320bB918258';
+      return '0x8C7e5fabbD4AA67B4E4dB8BeEc191A5b5942a797';
   }
 }
 

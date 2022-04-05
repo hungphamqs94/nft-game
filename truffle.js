@@ -8,11 +8,11 @@ module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
   networks: {
-    // development: {
-    //   host: "127.0.0.1",
-    //   port: 8545,
-    //   network_id: "*" // Match any network id
-    // },
+    development: {
+      host: "127.0.0.1",
+      port: 8545,
+      network_id: "*" // Match any network id
+    },
     ropsten: {
       // provider: function() {
       //   return new HDWalletProvider(mnemonic, "https://ropsten.infura.io/v3/67f3e4e6a1d8477ca360d881fbff6baa");
@@ -35,10 +35,13 @@ module.exports = {
   solc: {
     optimizer: {
       enabled: true,
-      runs: 200
-    }
+      runs: 200,
+    },
+    version: "0.8.13"
   },
   compilers: {
-    version: "^0.6.0"
+    solc: {
+      version: "0.8.13"
+    }
   }
 };

@@ -1,6 +1,6 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
 
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
 import './CryptoHerosToken.sol';
 
 contract CryptoHerosGame is Ownable {
@@ -26,13 +26,14 @@ contract CryptoHerosGame is Ownable {
 
   SingleGame[] public singleGames;
 
+
   mapping(address => uint256[]) public usersSingleGames;
 
   constructor(CryptoHerosToken _cryptoHerosToken) public { 
     cryptoHerosToken = _cryptoHerosToken;
   }
 
-  function () external payable {
+  fallback() external payable {
 
   }
 
@@ -57,17 +58,18 @@ contract CryptoHerosGame is Ownable {
     SingleGame memory _singleGame;
     if (result == 0) {
       _singleGame = SingleGame({player: msg.sender, userResult: userTokenNumber, contractResult: contractTokenNumber, playerBet: msg.value, game: game, result: 2});
-      require(msg.sender.send(msg.value * 1 - gameFee));
-
+      // require(transferFrom(msg.sender, address(this), msg.value * 1 - gameFee));
+      require(payable(msg.sender).send(msg.value * 1 - gameFee));
     } else if (result > 0) {
       _singleGame = SingleGame({player: msg.sender, userResult: userTokenNumber, contractResult: contractTokenNumber, playerBet: msg.value, game: game, result: 0});
-      require(msg.sender.send(msg.value * 150 / 100));
-
+      // require(transferFrom(msg.sender, address(this),msg.value * 150 / 100));
+      require(payable(msg.sender).send(msg.value * 150 / 100));
     } else {
       _singleGame = SingleGame({player: msg.sender, userResult: userTokenNumber, contractResult: contractTokenNumber, playerBet: msg.value, game: game, result: 1});
     }
 
-    maxSingleGameId = singleGames.push(_singleGame) - 1;
+    singleGames.push(_singleGame);
+    maxSingleGameId = singleGames.length - 1;
 
     uint256[] storage userSingleGames = usersSingleGames[msg.sender];
     userSingleGames.push(maxSingleGameId);
@@ -90,7 +92,8 @@ contract CryptoHerosGame is Ownable {
 
   function withdraw(uint amount) public payable onlyOwner returns(bool) {
     require(amount <= address(this).balance);
-    msg.sender.transfer(amount);
+    payable(msg.sender).transfer(amount);
+
     return true;
   }
 

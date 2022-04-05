@@ -1,14 +1,14 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
 
-import 'zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol';
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
+import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
 
 /**
  * @title ERC721TokenMock
  * This mock just provides a public mint and burn functions for testing purposes,
  * and a public setter for metadata URI
  */
-contract CryptoHerosToken is ERC721Token, Ownable {
+contract CryptoHerosToken is ERC721, Ownable {
   mapping (uint256 => address) internal tokenOwner;
   uint constant minPrice = 0.01 ether;
 
@@ -26,11 +26,13 @@ contract CryptoHerosToken is ERC721Token, Ownable {
 
   uint nonce = 0;
   Hero[] public heros;
+
+  mapping( address => uint256[]) listTokenUser;
   
   mapping(uint256 => Hero) public tokenProperty;
   
   constructor(string memory name, string memory symbol) public
-    ERC721Token(name, symbol)
+    ERC721(name, symbol)
   { }
 
   function initImage(string memory _image) public onlyOwner {
@@ -46,6 +48,10 @@ contract CryptoHerosToken is ERC721Token, Ownable {
     descriptions.push(_description);
   }
 
+  function totalSupply() public view returns (uint256) {
+    return heros.length;
+  }
+
   /**
    * Only owner can mint
    */
@@ -58,23 +64,32 @@ contract CryptoHerosToken is ERC721Token, Ownable {
     //require(owner.send(msg.value));
     uint256 _tokenId = totalSupply();
     tokenOwner[_tokenId] = msg.sender;
-    uint num = rand(0, numbers.length);
-    uint _number = numbers[num];
+    uint256 num = rand(0, numbers.length);
+    uint256 _number = numbers[num];
     string memory _image = images[rand(0, images.length)];
     string memory _background = backgrounds[rand(0, backgrounds.length)];
     string memory _description = descriptions[num];
     heros.push(Hero({number: _number, image: _image, background: _background, description: _description}));
+
+    listTokenUser[msg.sender][listTokenUser[msg.sender].length] = _tokenId;
+
     tokenProperty[_tokenId] = Hero({number: _number, image: _image, background: _background, description: _description});
     super._mint(msg.sender, _tokenId);
   }
 
   function burn(uint256 _tokenId) public onlyOwner {
     tokenOwner[_tokenId] = address(0);
-    super._burn(ownerOf(_tokenId), _tokenId);
+    for(uint i=0;i<listTokenUser[msg.sender].length; i++){
+      if(_tokenId == listTokenUser[msg.sender][i]){
+        listTokenUser[msg.sender][i] = listTokenUser[msg.sender][listTokenUser[msg.sender].length-1] ; 
+        listTokenUser[msg.sender].pop();
+      }
+    }
+    super._burn(_tokenId);
   }
 
   function getOwnedTokens(address _owner) external view returns (uint256[] memory) {
-    return ownedTokens[_owner];
+    return listTokenUser[_owner];
   }
 
   function getTokenProperty(uint256 _tokenId) external view returns (uint _number, string memory _image, string memory _background, string memory _description) {
@@ -92,7 +107,7 @@ contract CryptoHerosToken is ERC721Token, Ownable {
 
   function withdraw(uint amount) public payable onlyOwner returns(bool) {
     require(amount <= address(this).balance);
-    msg.sender.transfer(amount);
+    transferFrom(address(this), msg.sender, amount);
     return true;
   }
   

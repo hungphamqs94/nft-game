@@ -808,7 +808,7 @@ CryptoHerosToken.prototype.ownerOf = function (tokenId, callback) {
 
 CryptoHerosToken.prototype.getTokenProperty = function (tokenId, callback) {
   return this.cryptoHerosTokenPromise.then(function (cryptoHerosToken) {
-    return cryptoHerosToken.getTokenPropertyAsync(tokenId);
+    return cryptoHerosToken.getOwnedTokens(tokenId);
   });
 }
 
@@ -820,7 +820,7 @@ CryptoHerosToken.prototype.transferOwnership = function (address, callback) {
 
 CryptoHerosToken.prototype.getOwnedTokens = function (address, callback) {
   return this.cryptoHerosTokenPromise.then(function (cryptoHerosToken) {
-    return cryptoHerosToken.getOwnedTokensAsync(address);
+    return cryptoHerosToken.getOwnedTokens(address);
   });
 }
 
