@@ -3,7 +3,7 @@ require("babel-register")({
 });
 require("babel-polyfill");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const mnemonic = "february honey give inmate protect twelve erosion cram harsh cabbage glove enter";
+const mnemonic = "";
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
